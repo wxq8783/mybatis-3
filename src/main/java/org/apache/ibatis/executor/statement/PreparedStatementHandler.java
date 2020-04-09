@@ -62,6 +62,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
   public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
     PreparedStatement ps = (PreparedStatement) statement;
     ps.execute();
+    //查询出数据 使用ResultSetHandler封装结果
     return resultSetHandler.handleResultSets(ps);
   }
 
@@ -71,7 +72,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
     ps.execute();
     return resultSetHandler.handleCursorResultSets(ps);
   }
-
+  //预编译sql 生成原生JDBC的prepareStatement， 调用jdbc的connection.prepareStatement("select id , content from blog"); 生成JDBC的prepareStatement
   @Override
   protected Statement instantiateStatement(Connection connection) throws SQLException {
     String sql = boundSql.getSql();
@@ -88,7 +89,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
       return connection.prepareStatement(sql, mappedStatement.getResultSetType().getValue(), ResultSet.CONCUR_READ_ONLY);
     }
   }
-
+  //调用ParameterHandler 设置参数
   @Override
   public void parameterize(Statement statement) throws SQLException {
     parameterHandler.setParameters((PreparedStatement) statement);

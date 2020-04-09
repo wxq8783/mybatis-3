@@ -64,6 +64,7 @@ public class MapperRegistry {
       }
       boolean loadCompleted = false;
       try {
+        //创建一个接口类和对应的MapperProxyFactory的缓存 type是从nameSpace中得到接口通过反射得到
         knownMappers.put(type, new MapperProxyFactory<>(type));
         // It's important that the type is added before the parser is run
         // otherwise the binding may automatically be attempted by the

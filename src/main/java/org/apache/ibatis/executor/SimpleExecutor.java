@@ -55,11 +55,11 @@ public class SimpleExecutor extends BaseExecutor {
 
   @Override
   public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
-    Statement stmt = null;
+    Statement stmt = null;//这个是jdbc的statement
     try {
-      Configuration configuration = ms.getConfiguration();
+      Configuration configuration = ms.getConfiguration();//TODO 创建四大对象值StatementHandler
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
-      stmt = prepareStatement(handler, ms.getStatementLog());
+      stmt = prepareStatement(handler, ms.getStatementLog());//获取到PrepareStatement 和 设置好参数 开始进行查询
       return handler.query(stmt, resultHandler);
     } finally {
       closeStatement(stmt);
@@ -82,7 +82,7 @@ public class SimpleExecutor extends BaseExecutor {
   }
 
   private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
-    Statement stmt;
+    Statement stmt;//获取jdbc的链接
     Connection connection = getConnection(statementLog);
     stmt = handler.prepare(connection, transaction.getTimeout());
     handler.parameterize(stmt);
